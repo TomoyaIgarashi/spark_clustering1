@@ -19,3 +19,6 @@ sbt/*.jar
 
 #ignore the metastore
 metastore_db/*
+
+#ignore local configurations
+conf/local.properties
