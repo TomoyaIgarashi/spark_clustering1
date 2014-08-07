@@ -1,7 +1,5 @@
 package jp.co.couger.clustering
 
-import scala.collection.JavaConversions
-
 import java.net.URL
 import java.io.FileInputStream
 import java.util.Properties
@@ -14,6 +12,7 @@ import org.apache.spark.SparkContext._
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
+import scala.collection.JavaConversions
 import scala.language.reflectiveCalls
 import scala.util.matching.Regex
 
