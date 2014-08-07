@@ -116,11 +116,16 @@ object Clustering {
         // グループ分けしたものを書き出し
         val ary2 = rdd4.collect
 
+        // ID指定のあるアクセスを除外
+        val er1 = """[0-9]+.json""".r
+        val pf8: PartialFunction[(DateTime, String), String] = {
+          case (d, s) if (er1 findFirstIn s).isEmpty => s
+        }
         // ascend by DateTime
         implicit def dateTimeOrdering: Ordering[DateTime] = Ordering.fromLessThan(_ isBefore _)
         val accessSequence = ary2.map { r =>
           // アクセス順にURLを並べた文字列を生成
-          sc.parallelize(r.toList).sortByKey().map(_._2).fold("")(_ + _)
+          sc.parallelize(r.toList).sortByKey().collect(pf8).fold("")(_ + _)
         }
         // アクセス順URLをキーに(access sequence, 1)のRDDを生成して集計
         val rdd5 = sc.parallelize(accessSequence.toList).map((_, 1)).reduceByKey(_ + _).map {case (key, count) => (count, key)}.sortByKey()
