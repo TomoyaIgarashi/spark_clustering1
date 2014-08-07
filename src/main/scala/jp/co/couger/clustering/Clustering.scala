@@ -123,7 +123,7 @@ object Clustering {
           sc.parallelize(r.toList).sortByKey().map(_._2).fold("")(_ + _)
         }
         // アクセス順URLをキーに(access sequence, 1)のRDDを生成して集計
-        val rdd5 = sc.parallelize(accessSequence.toList).map((_, 1)).reduceByKey(_ + _)
+        val rdd5 = sc.parallelize(accessSequence.toList).map((_, 1)).reduceByKey(_ + _).map {case (key, count) => (count, key)}.sortByKey()
         rdd5.collect.foreach(println)
       }
     }
